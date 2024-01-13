@@ -2,8 +2,9 @@ import { useEffect, useState, useRef } from "react";
 import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
+import { socket } from "../utils/socketIO.js";
 
-const ChatScreen = ({ socket }) => {
+const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [typingStatus, setTypingStatus] = useState("");
   const lastMessageRef = useRef(null);
