@@ -20,6 +20,6 @@ const userSchema = mongoose.Schema(
   { timestaps: true }
 );
 
-const Userodel = mongoose.model("User", userSchema);
+const UserModel = mongoose.model("User", userSchema);
 
 export default UserModel;

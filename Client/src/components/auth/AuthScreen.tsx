@@ -59,7 +59,11 @@ const AuthScreen = () => {
               <Tab label="LOGIN" value={1} />
               <Tab label="REGISTER" value={2} />
             </Tabs>
-            {value === 1 ? <Login /> : <Register />}
+            {value === 1 ? (
+              <Login />
+            ) : (
+              <Register changeTabValue={(val: number) => setValue(val)} />
+            )}
           </Paper>
         </Grid>
       </Grid>
