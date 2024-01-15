@@ -10,3 +10,47 @@ Uses Socket.io for real time communication and stores user details in encrypted 
 **Server:->** Node JS, Express JS
 
 **Database:->** MongoDB
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/NaveenMathramkott/Chat_Gram.git
+```
+
+Go to the project directory
+
+```bash
+  cd Chat_Gram
+```
+
+Install dependencies
+
+```bash
+  cd server
+  npm install
+```
+
+```bash
+  cd client
+  npm install
+```
+
+Start the server
+
+```bash
+  cd server
+  npm run start
+```
+
+Start the Client
+
+```bash
+  cd frontend
+  npm start
+```
+
+## Features
+
+### Authenticaton
