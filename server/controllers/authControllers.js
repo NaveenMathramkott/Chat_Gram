@@ -67,8 +67,8 @@ export const loginController = async (req, res) => {
         name: user.name,
         email: user.email,
         admin: user.admin,
+        token: token,
       },
-      token,
     });
   } catch (error) {
     res.status(500).send({
