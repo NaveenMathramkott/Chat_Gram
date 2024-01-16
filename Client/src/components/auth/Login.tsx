@@ -1,117 +1,105 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
-import {
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Paper,
-  TextField,
-} from "@mui/material";
-import axios from "axios";
+import { Button } from "@chakra-ui/button";
+import { FormControl, FormLabel } from "@chakra-ui/form-control";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
+import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
-import toast from "react-hot-toast";
-import commonStyles from "../../utils/commonStyles.js";
-import { checkEmail } from "../../utils/constants.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ChatState } from "../../context/ChatProvider.jsx";
 
 const Login = () => {
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const onSubmitFormData = async () => {
+  const navigation = useNavigate();
+  const { setUser } = ChatState();
+
+  const submitHandler = async () => {
     setLoading(true);
+    if (!email || !password) {
+      // title: "Please Fill all the Feilds",
+
+      setLoading(false);
+      return;
+    }
+
     try {
-      const data = {
-        email: userEmail,
-        password: userPassword,
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
       };
-      const result = await axios
-        .post(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/login`, data)
-        .then((res) => res.data);
-      if (result.success) {
-        localStorage.setItem("user", JSON.stringify(result));
-        toast.success(result.message);
-        setLoading(false);
-      }
+
+      const { data } = await axios.post(
+        "/api/user/login",
+        { email, password },
+        config
+      );
+
+      // title: "Login Successful",
+
+      setUser(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      navigation("/chats");
     } catch (error) {
-      toast.success(error.message);
+      // title: "Error Occured!",
+
       setLoading(false);
     }
   };
 
   return (
-    <Paper
-      elevation={4}
-      style={{
-        backgroundColor: "white",
-        width: "100%",
-        ...commonStyles.flexCenter,
-      }}
-    >
-      <Grid
-        gap={2}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "80%",
-          alignItems: "stretch",
-          justifyContent: "center",
-        }}
-        padding={2}
-      >
-        <TextField
-          required
-          size="small"
-          label="Email Id"
-          placeholder="Enter Your Email Id"
-          value={userEmail}
-          error={userEmail ? checkEmail(userEmail) : false}
-          onChange={(e) => setUserEmail(e.target.value)}
+    <VStack spacing="10px">
+      <FormControl id="email" isRequired>
+        <FormLabel>Email Address</FormLabel>
+        <Input
+          value={email}
+          type="email"
+          placeholder="Enter Your Email Address"
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <FormControl variant="outlined">
-          <InputLabel size="small" htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            placeholder="Enter Your Password"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            size="small"
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
+      </FormControl>
+      <FormControl id="password" isRequired>
+        <FormLabel>Password</FormLabel>
+        <InputGroup size="md">
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
           />
-        </FormControl>
-
-        <LoadingButton
-          size="small"
-          onClick={onSubmitFormData}
-          loading={loading}
-          loadingPosition="center"
-          variant="contained"
-          disabled={!userPassword || checkEmail(userEmail)}
-        >
-          Login
-        </LoadingButton>
-        <Button variant="outlined">Reset Password</Button>
-      </Grid>
-    </Paper>
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+      <Button
+        colorScheme="blue"
+        width="100%"
+        style={{ marginTop: 15 }}
+        onClick={submitHandler}
+        isLoading={loading}
+      >
+        Login
+      </Button>
+      <Button
+        variant="solid"
+        colorScheme="gray"
+        width="100%"
+        onClick={() => {
+          setEmail("guest@test.com");
+          setPassword("123456789");
+        }}
+      >
+        Guest Login
+      </Button>
+    </VStack>
   );
 };
 

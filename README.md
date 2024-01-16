@@ -5,7 +5,7 @@ Uses Socket.io for real time communication and stores user details in encrypted 
 
 ## Tech Stacks
 
-**Client:->** React JS, Material UI
+**Client:->** React JS, Chakra UI
 
 **Server:->** Node JS, Express JS
 

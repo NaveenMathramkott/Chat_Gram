@@ -1,211 +1,170 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  Avatar,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Paper,
-  TextField,
-} from "@mui/material";
-
-import { useState } from "react";
-import commonStyles from "../../utils/commonStyles.js";
+import { Button } from "@chakra-ui/button";
+import { Avatar, FormControl, FormLabel, WrapItem } from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/layout";
 import axios from "axios";
-import { LoadingButton } from "@mui/lab";
-import toast from "react-hot-toast";
-import { checkEmail } from "../../utils/constants.js";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import commonStyles from "../../constants/commonStyles";
 
-const Register = ({ changeTabValue }) => {
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  // const [userPasswordConfirm, setUserPasswordConfirm] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [loading, setLoading] = useState(false);
+const Register = () => {
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+  const navigation = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [confirmpassword, setConfirmpassword] = useState();
+  const [password, setPassword] = useState();
+  const [pic, setPic] = useState();
+  const [picLoading, setPicLoading] = useState(false);
 
-  const changeTabVal = () => {
-    changeTabValue(1);
+  const submitHandler = async () => {
+    setPicLoading(true);
+    if (!name || !email || !password || !confirmpassword) {
+      // title: "Please Fill all the Feilds",
+
+      setPicLoading(false);
+      return;
+    }
+    if (password !== confirmpassword) {
+      // title: "Passwords Do Not Match",
+
+      return;
+    }
+    console.log(name, email, password, pic);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/user",
+        {
+          name,
+          email,
+          password,
+          pic,
+        },
+        config
+      );
+      console.log(data);
+
+      // title: "Registration Successful",
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setPicLoading(false);
+      navigation("/chats");
+    } catch (error) {
+      // title: "Error Occured!",
+
+      setPicLoading(false);
+    }
   };
 
-  // function upload avatar to cloudinary and get image url
-  const uploadCloudaryProfile = async (photoData: any) => {
-    try {
-      setLoading(true);
+  const postDetails = (pics) => {
+    setPicLoading(true);
+    if (pics === undefined) {
+      // title: "Please Select an Image!",
+
+      return;
+    }
+    console.log(pics);
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
-      data.append("file", photoData);
+      data.append("file", pics);
       data.append("upload_preset", "chat-app");
       data.append("cloud_name", "dqficjwys");
-      const picData = await axios
+      axios
         .post("https://api.cloudinary.com/v1_1/dqficjwys/image/upload", data)
-        .then((response) => response.data);
-      setProfilePic(picData.url);
-      toast.success("Profile Pic Added");
-      setLoading(false);
-    } catch (error) {
-      console.log("--error--", error);
-      setLoading(false);
-    }
-  };
-  const onSubmitFormData = async () => {
-    setLoading(true);
-    try {
-      const data = {
-        name: userName,
-        email: userEmail,
-        password: userPassword,
-        image: profilePic,
-      };
-      const result = await axios
-        .post(`${import.meta.env.VITE_BASE_URL}/api/v1/auth/register`, data)
-        .then((res) => res.data);
-      if (result.success) {
-        toast.success(result.message);
-        setLoading(false);
-        changeTabVal();
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.success(error.message);
+        .then((res) => {
+          setPic(res.data.url.toString());
+          setPicLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setPicLoading(false);
+        });
+    } else {
+      // title: "Please Select an Image!",
+
+      setPicLoading(false);
+      return;
     }
   };
 
-  // function return first 2 letter of username
-  // const getNamedAvatar = (username: string) => {
-  //   const name = username.split(" ");
-  //   const data = name[0].substring(0, 1) + name[1].substring(0, 1);
-  //   return data;
-  // };
   return (
-    <Paper
-      elevation={4}
-      style={{
-        backgroundColor: "white",
-        width: "100%",
-        ...commonStyles.flexCenter,
-      }}
-    >
-      <Grid
-        gap={2}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "80%",
-          alignItems: "stretch",
-          justifyContent: "center",
-        }}
-        padding={2}
+    <VStack spacing="5px">
+      <WrapItem
+        boxShadow={commonStyles.shadow}
+        borderRadius={"50%"}
+        position={"relative"}
       >
-        <Paper
-          elevation={3}
-          style={{
-            alignSelf: "center",
+        <Avatar size="xl" name={name} src={pic} />
+        <Input
+          id="imageUpload"
+          type="file"
+          accept="image/*"
+          onChange={(e) => postDetails(e.target.files[0])}
+        />
+        <Button
+          //   isLoading
+
+          colorScheme="teal"
+          variant="solid"
+          size="xs"
+          sx={{
             borderRadius: "50%",
-            padding: 2,
-            position: "relative",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
           }}
         >
-          <Avatar
-            alt={userName.toUpperCase()}
-            src={profilePic}
-            sx={{ width: 56, height: 56 }}
-          />
-          <label className="custom-file-upload">
-            +
-            <input
-              type="file"
-              name="file"
-              accept="image/*"
-              onChange={(e) => uploadCloudaryProfile(e.target.files[0])}
-            />
-          </label>
-        </Paper>
-        <TextField
-          size="small"
-          label="Name"
+          +
+        </Button>
+      </WrapItem>
+      <FormControl id="first-name" isRequired>
+        <FormLabel>Name</FormLabel>
+        <Input
           placeholder="Enter Your Name"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
-        <TextField
-          size="small"
-          label="Email Id"
-          placeholder="Enter Your Email"
-          error={userEmail ? checkEmail(userEmail) : false}
+      </FormControl>
+      <FormControl id="email" isRequired>
+        <FormLabel>Email Address</FormLabel>
+        <Input
           type="email"
-          value={userEmail}
-          onChange={(e) => setUserEmail(e.target.value)}
+          placeholder="Enter Your Email Address"
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <FormControl variant="outlined">
-          <InputLabel size="small" htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            size="small"
-            placeholder="Enter Your Password"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
+      </FormControl>
+      <FormControl id="password" isRequired>
+        <FormLabel>Password</FormLabel>
+        <InputGroup size="md">
+          <Input
+            type={show ? "text" : "password"}
+            placeholder="Enter Password"
+            onChange={(e) => setPassword(e.target.value)}
           />
-        </FormControl>
-        {/* <FormControl variant="outlined">
-          <InputLabel size="small" htmlFor="outlined-adornment-password">
-            Confirm Password
-          </InputLabel>
-          <OutlinedInput
-            size="small"
-            error={userPassword !== userPasswordConfirm}
-            placeholder="Confirm Your Password"
-            value={userPasswordConfirm}
-            onChange={(e) => setUserPasswordConfirm(e.target.value)}
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Confirm Password"
-          />
-        </FormControl> */}
-        <LoadingButton
-          onClick={onSubmitFormData}
-          loading={loading}
-          loadingPosition="center"
-          variant="contained"
-          disabled={
-            !userName || !userEmail || !userPassword || checkEmail(userEmail)
-            //  || !userPasswordConfirm
-          }
-        >
-          Register
-        </LoadingButton>
-        <Button variant="outlined">Sign Up Options</Button>
-      </Grid>
-    </Paper>
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+
+      <Button
+        colorScheme="blue"
+        width="100%"
+        style={{ marginTop: 15 }}
+        onClick={submitHandler}
+        isLoading={picLoading}
+      >
+        Sign Up
+      </Button>
+    </VStack>
   );
 };
 
