@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../context/ChatProvider.jsx";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -20,6 +21,7 @@ const Login = () => {
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
+      toast.error(`Please Fill all the Feilds`);
       // title: "Please Fill all the Feilds",
 
       setLoading(false);
@@ -27,25 +29,21 @@ const Login = () => {
     }
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-
       const { data } = await axios.post(
-        "/api/user/login",
-        { email, password },
-        config
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/login`,
+        { email, password }
       );
-
+      const tokenAddedUser = data.user;
+      tokenAddedUser.token = data.token;
+      localStorage.setItem("userInfo", JSON.stringify(tokenAddedUser));
+      toast.success(data.message);
       // title: "Login Successful",
 
       setUser(data);
-      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       navigation("/chats");
     } catch (error) {
+      toast.error(error.message);
       // title: "Error Occured!",
 
       setLoading(false);

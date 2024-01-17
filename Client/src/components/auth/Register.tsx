@@ -1,11 +1,18 @@
 import { Button } from "@chakra-ui/button";
-import { Avatar, FormControl, FormLabel, WrapItem } from "@chakra-ui/react";
+import {
+  Avatar,
+  FormControl,
+  FormLabel,
+  WrapItem,
+  background,
+} from "@chakra-ui/react";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { VStack } from "@chakra-ui/layout";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import commonStyles from "../../constants/commonStyles";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [show, setShow] = useState(false);
@@ -14,49 +21,44 @@ const Register = () => {
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
-  const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
 
   const submitHandler = async () => {
     setPicLoading(true);
-    if (!name || !email || !password || !confirmpassword) {
+    if (!name || !email || !password) {
+      toast.error(`Please Fill all the Feilds`);
       // title: "Please Fill all the Feilds",
-
       setPicLoading(false);
       return;
     }
-    if (password !== confirmpassword) {
-      // title: "Passwords Do Not Match",
 
-      return;
-    }
-    console.log(name, email, password, pic);
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
       const { data } = await axios.post(
-        "/api/user",
+        `${import.meta.env.VITE_BASE_URL}/api/v1/auth/register`,
         {
           name,
           email,
           password,
-          pic,
+          image: pic,
         },
-        config
+        {
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
       );
+      const tokenAddedUser = data.user;
+      tokenAddedUser.token = data.token;
+      localStorage.setItem("userInfo", JSON.stringify(tokenAddedUser));
       console.log(data);
-
+      toast.success(data.message);
       // title: "Registration Successful",
-
-      localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
       navigation("/chats");
     } catch (error) {
+      toast.error(error.messages);
       // title: "Error Occured!",
 
       setPicLoading(false);
@@ -102,16 +104,23 @@ const Register = () => {
         position={"relative"}
       >
         <Avatar size="xl" name={name} src={pic} />
-        <Input
-          id="imageUpload"
+        <input
           type="file"
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
+          style={{
+            opacity: 0,
+            position: "absolute",
+            width: "20px",
+            height: "20px",
+            zIndex: 10,
+            bottom: 2,
+            right: 1,
+          }}
         />
         <Button
-          //   isLoading
-
-          colorScheme="teal"
+          isLoading={picLoading}
+          colorScheme="blue"
           variant="solid"
           size="xs"
           sx={{
@@ -160,6 +169,7 @@ const Register = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
+        isDisabled={!name || !email || !password}
         isLoading={picLoading}
       >
         Sign Up

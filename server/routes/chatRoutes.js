@@ -6,6 +6,7 @@ import {
   createGroupChat,
   fetchChats,
   removeFromGroup,
+  removeGroup,
   renameGroup,
 } from "../controllers/chatController.js";
 
@@ -23,10 +24,13 @@ router.post("/group", requireSignIn, createGroupChat);
 // to rename a group chat
 router.put("/groupchat/rename", requireSignIn, renameGroup);
 
+// to add  user to a group chat
+router.put("/groupchat/adduser", requireSignIn, addToGroup);
+
 // to remove user from a group chat
 router.put("/groupchat/removeuser", requireSignIn, removeFromGroup);
 
-// to add  user to a group chat
-router.put("/groupchat/adduser", requireSignIn, addToGroup);
+// to remove user from a group chat
+router.put("/groupchat/remove", requireSignIn, removeGroup);
 
 export default router;
