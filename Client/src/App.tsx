@@ -1,14 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
+import { Toaster } from "react-hot-toast";
+import ChatScreen from "./screens/ChatScreen";
+import ChatProvider from "../src/context/ChatProvider";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" Component={HomeScreen} />
-        {/* <Route path="/chats" component={Chatpage} /> */}
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Toaster />
+      <BrowserRouter>
+        <ChatProvider>
+          <Routes>
+            <Route path="/" Component={HomeScreen} />
+            <Route path="/chats" Component={ChatScreen} />
+          </Routes>
+        </ChatProvider>
+      </BrowserRouter>
+    </>
   );
 }
 

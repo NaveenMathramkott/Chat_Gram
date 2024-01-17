@@ -15,10 +15,6 @@
   /* filter: blur(10px); */
 }
 
-#imageUpload {
-  display: none;
-}
-
 .custom-file-upload {
   background-color: #2196f3;
   color: white;

@@ -43,6 +43,7 @@ export const loginController = async (req, res) => {
       });
     }
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       return res.status(404).send({
         success: false,
@@ -63,12 +64,8 @@ export const loginController = async (req, res) => {
     res.status(200).send({
       success: true,
       message: `User login successfully`,
-      user: {
-        name: user.name,
-        email: user.email,
-        admin: user.admin,
-        token: token,
-      },
+      user,
+      token,
     });
   } catch (error) {
     res.status(500).send({

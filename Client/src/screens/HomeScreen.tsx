@@ -18,9 +18,8 @@ const HomeScreen = () => {
   const navigation = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("userDetails"));
-
-    // if (user) navigation("/chats");
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+    if (user) navigation("/chats");
   }, [navigation]);
 
   return (

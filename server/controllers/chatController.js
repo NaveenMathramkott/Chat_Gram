@@ -124,7 +124,6 @@ const removeFromGroup = async (req, res) => {
   const { chatId, userId } = req.body;
 
   // set authorization for admmin only
-
   const removed = await ChatModel.findByIdAndUpdate(
     chatId,
     {
@@ -168,6 +167,19 @@ const addToGroup = async (req, res) => {
   }
 };
 
+const removeGroup = async (req, res) => {
+  const { chatId } = req.body;
+
+  // set authorization for admmin only
+  const removed = await ChatModel.findOneAndDelete(chatId);
+
+  if (!removed) {
+    res.status(404).send("Issue With deleting");
+  } else {
+    res.status(200).send(removed);
+  }
+};
+
 export {
   accessChat,
   fetchChats,
@@ -175,4 +187,5 @@ export {
   renameGroup,
   removeFromGroup,
   addToGroup,
+  removeGroup,
 };
