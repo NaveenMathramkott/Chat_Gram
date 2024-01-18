@@ -1,11 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import {
-  Avatar,
-  FormControl,
-  FormLabel,
-  WrapItem,
-  background,
-} from "@chakra-ui/react";
+import { Avatar, FormControl, FormLabel, WrapItem } from "@chakra-ui/react";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { VStack } from "@chakra-ui/layout";
 import axios from "axios";
@@ -29,7 +23,7 @@ const Register = () => {
     setPicLoading(true);
     if (!name || !email || !password) {
       toast.error(`Please Fill all the Feilds`);
-      // title: "Please Fill all the Feilds",
+
       setPicLoading(false);
       return;
     }
@@ -54,12 +48,10 @@ const Register = () => {
       localStorage.setItem("userInfo", JSON.stringify(tokenAddedUser));
       console.log(data);
       toast.success(data.message);
-      // title: "Registration Successful",
       setPicLoading(false);
       navigation("/chats");
     } catch (error) {
       toast.error(error.messages);
-      // title: "Error Occured!",
 
       setPicLoading(false);
     }
@@ -68,7 +60,7 @@ const Register = () => {
   const postDetails = (pics) => {
     setPicLoading(true);
     if (pics === undefined) {
-      // title: "Please Select an Image!",
+      toast.error("Please Select an Image!");
 
       return;
     }
@@ -89,7 +81,7 @@ const Register = () => {
           setPicLoading(false);
         });
     } else {
-      // title: "Please Select an Image!",
+      toast.error("Please Select an Image!");
 
       setPicLoading(false);
       return;

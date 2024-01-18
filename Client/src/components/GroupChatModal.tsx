@@ -10,7 +10,6 @@ import {
   useDisclosure,
   FormControl,
   Input,
-  useToast,
   Box,
   Skeleton,
 } from "@chakra-ui/react";
@@ -19,6 +18,7 @@ import { useState } from "react";
 import { ChatState } from "../context/ChatProvider";
 import UserBadgeItem from "./UserBadgeItem";
 import UserListItem from "./UserListItem";
+import toast from "react-hot-toast";
 
 const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,19 +27,13 @@ const GroupChatModal = ({ children }) => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
 
   const { user, chats, setChats } = ChatState();
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
-      toast({
-        title: "User already added",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      toast.error("User already added");
+
       return;
     }
 
@@ -67,14 +61,7 @@ const GroupChatModal = ({ children }) => {
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Search Results",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      toast.error("Failed to Load the Search Results");
     }
   };
 
@@ -84,13 +71,8 @@ const GroupChatModal = ({ children }) => {
 
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
-      toast({
-        title: "Please fill all the feilds",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
+      toast.error("Please fill all the feilds");
+
       return;
     }
 
@@ -110,22 +92,9 @@ const GroupChatModal = ({ children }) => {
       );
       setChats([data, ...chats]);
       onClose();
-      toast({
-        title: "New Group Chat Created!",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      toast.success("New Group Chat Created!");
     } catch (error) {
-      toast({
-        title: "Failed to Create the Chat!",
-        description: error.response.data,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      toast.error("Failed to Create the Chat!");
     }
   };
 
@@ -138,7 +107,7 @@ const GroupChatModal = ({ children }) => {
         <ModalContent>
           <ModalHeader
             fontSize="35px"
-            fontFamily="Work sans"
+            fontFamily="sans-serif"
             display="flex"
             justifyContent="center"
           >
@@ -155,7 +124,7 @@ const GroupChatModal = ({ children }) => {
             </FormControl>
             <FormControl>
               <Input
-                placeholder="Add Users eg: John, Piyush, Jane"
+                placeholder="Add Users eg: Naveen, kalidas"
                 mb={1}
                 onChange={(e) => handleSearch(e.target.value)}
               />

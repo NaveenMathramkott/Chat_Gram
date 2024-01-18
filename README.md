@@ -53,4 +53,4 @@ Start the Client
 
 ## Features
 
-### Authenticaton
+### Authenticaton, Notifications, Real-time chat, user-user chat, gorup chat, profile view, user search, add update remove chats, admin controls

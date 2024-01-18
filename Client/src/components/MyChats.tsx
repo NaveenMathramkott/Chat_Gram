@@ -7,13 +7,15 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
+import toast from "react-hot-toast";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
+  const [chatLoading, setChatLoading] = useState(false);
 
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-
   const fetchChats = async () => {
+    setChatLoading(true);
     try {
       const config = {
         headers: {
@@ -26,8 +28,10 @@ const MyChats = ({ fetchAgain }) => {
         config
       );
       setChats(data);
+      setChatLoading(false);
     } catch (error) {
-      // description: "Failed to Load the chats",
+      toast.error("Failed to Load the chats");
+      setChatLoading(false);
     }
   };
 
@@ -51,14 +55,15 @@ const MyChats = ({ fetchAgain }) => {
       <Box
         pb={3}
         px={3}
-        fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
+        fontSize={{ base: "20px", md: "20px" }}
+        fontWeight={"500"}
+        fontFamily="sans-serif"
         display="flex"
         w="100%"
         justifyContent="space-between"
         alignItems="center"
       >
-        My Chats
+        Recents
         <GroupChatModal>
           <Button
             display="flex"
@@ -109,8 +114,9 @@ const MyChats = ({ fetchAgain }) => {
             ))}
           </Stack>
         ) : (
-          <ChatLoading />
+          <Text fontSize="lg">No chats found</Text>
         )}
+        {chatLoading && <ChatLoading />}
       </Box>
     </Box>
   );

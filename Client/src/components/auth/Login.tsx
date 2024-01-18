@@ -22,7 +22,6 @@ const Login = () => {
     setLoading(true);
     if (!email || !password) {
       toast.error(`Please Fill all the Feilds`);
-      // title: "Please Fill all the Feilds",
 
       setLoading(false);
       return;
@@ -37,14 +36,12 @@ const Login = () => {
       tokenAddedUser.token = data.token;
       localStorage.setItem("userInfo", JSON.stringify(tokenAddedUser));
       toast.success(data.message);
-      // title: "Login Successful",
 
       setUser(data);
       setLoading(false);
       navigation("/chats");
     } catch (error) {
       toast.error(error.message);
-      // title: "Error Occured!",
 
       setLoading(false);
     }
@@ -95,7 +92,7 @@ const Login = () => {
           setPassword("123456789");
         }}
       >
-        Guest Login
+        Get Guest Login Credentials
       </Button>
     </VStack>
   );
