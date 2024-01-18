@@ -17,12 +17,11 @@ import {
   DrawerOverlay,
 } from "@chakra-ui/modal";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { BellIcon, ChevronDownIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "./ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
 import ProfileModal from "./ProfileModal";
@@ -31,6 +30,7 @@ import { Effect } from "react-notification-badge";
 import { getSender } from "../constants/ChatLogics";
 import UserListItem from "./UserListItem";
 import { ChatState } from "../context/ChatProvider";
+import toast from "react-hot-toast";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -47,7 +47,6 @@ function SideDrawer() {
     setChats,
   } = ChatState();
 
-  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigation = useNavigate();
 
@@ -58,13 +57,8 @@ function SideDrawer() {
 
   const handleSearch = async () => {
     if (!search) {
-      toast({
-        title: "Please Enter something in search",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
+      toast.error("Please Enter something in search");
+
       return;
     }
 
@@ -85,14 +79,7 @@ function SideDrawer() {
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Search Results",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      toast.error("Failed to Load the Search Results");
     }
   };
 
@@ -115,17 +102,9 @@ function SideDrawer() {
       setLoadingChat(false);
       onClose();
     } catch (error) {
-      toast({
-        title: "Error fetching the chat",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      toast.error("Error fetching the chat");
     }
   };
-  console.log("user data----", user);
 
   return (
     <>
@@ -136,19 +115,49 @@ function SideDrawer() {
         bg="white"
         w="100%"
         p="5px 10px 5px 10px"
-        borderWidth="5px"
+        borderWidth="2px"
+        borderRadius={"4px"}
       >
-        <Text fontSize="2xl" fontFamily="Work sans">
-          Chat Gram
-        </Text>
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" onClick={onOpen}>
-            <i className="fas fa-search"></i>
+            <HamburgerIcon />
             <Text display={{ base: "none", md: "flex" }} px={4}>
               Search User
             </Text>
           </Button>
+          {/* update in future */}
+          {/* <Box flexDirection={"column"}>
+            <Box display="flex" pb={2}>
+              <Input
+                placeholder="Search by name or email"
+                mr={2}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button onClick={handleSearch}>Go</Button>
+            </Box>
+            <Box position={"absolute"} bgColor={"white"}>
+              {loading ? (
+                <ChatLoading />
+              ) : (
+                searchResult?.map((user) => (
+                  <Box>
+                    <UserListItem
+                      key={user._id}
+                      user={user}
+                      handleFunction={() => accessChat(user._id)}
+                    />
+                  </Box>
+                ))
+              )}
+              {loadingChat && <Spinner ml="auto" display="flex" />}
+            </Box>
+          </Box> */}
         </Tooltip>
+
+        <Text fontSize="2xl" fontFamily="sans-serif">
+          CHAT GRAM
+        </Text>
         <div>
           <Menu>
             <MenuButton p={1}>
@@ -186,7 +195,7 @@ function SideDrawer() {
             </MenuButton>
             <MenuList>
               <ProfileModal user={user}>
-                <MenuItem>My Profile</MenuItem>{" "}
+                <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>

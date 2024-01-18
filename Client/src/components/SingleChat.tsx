@@ -1,5 +1,5 @@
 import { FormControl } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/react";
+import { Button, Input } from "@chakra-ui/react";
 import { Box, Text } from "@chakra-ui/layout";
 import { IconButton, Spinner } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../constants/ChatLogics";
@@ -14,6 +14,7 @@ import animationData from "./typing.json";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
+import toast from "react-hot-toast";
 const ENDPOINT = "http://localhost:4000"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 let socket = io(ENDPOINT);
 let selectedChatCompare;
@@ -63,7 +64,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if (newMessage) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -82,10 +83,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         );
         socket.emit("new message", data);
         setMessages([...messages, data]);
-        // console.log("messages data----", data);
       } catch (error) {
-        // console.log("messages error----", error);
-        // description: "Failed to send the Message",
+        toast.error("Failed to send the Message");
       }
     }
   };
@@ -153,7 +152,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             pb={3}
             px={2}
             w="100%"
-            fontFamily="Work sans"
+            fontFamily="sans-serif"
             display="flex"
             justifyContent={{ base: "space-between" }}
             alignItems="center"
@@ -215,12 +214,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
 
-            <FormControl
-              onKeyDown={sendMessage}
-              id="first-name"
-              isRequired
-              mt={3}
-            >
+            <FormControl isRequired mt={3}>
               {istyping ? (
                 <div>
                   <Lottie
@@ -233,13 +227,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
+              <Box
+                flexDirection={"row"}
+                display={"flex"}
+                justifyContent={"space-evenly"}
+                borderWidth={1}
+                borderColor={"grey"}
+                p={1}
+                borderRadius={"6px"}
+              >
+                <Input
+                  variant="filled"
+                  bg="#E0E0E0"
+                  placeholder="Enter a message.."
+                  value={newMessage}
+                  onChange={typingHandler}
+                  mr={1}
+                />
+                <Button
+                  onClick={sendMessage}
+                  colorScheme="teal"
+                  variant="solid"
+                  width={100}
+                >
+                  send
+                </Button>
+              </Box>
             </FormControl>
           </Box>
         </>
@@ -251,8 +264,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           justifyContent="center"
           h="100%"
         >
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
+          <Text fontSize="3xl" pb={3} fontFamily="sans-serif">
+            Click on a user to start the chat
           </Text>
         </Box>
       )}
