@@ -3,7 +3,7 @@ import { Avatar, FormControl, FormLabel, WrapItem } from "@chakra-ui/react";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { VStack } from "@chakra-ui/layout";
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import commonStyles from "../../constants/commonStyles";
 import toast from "react-hot-toast";
@@ -125,14 +125,14 @@ const Register = () => {
           +
         </Button>
       </WrapItem>
-      <FormControl id="first-name" isRequired>
+      <FormControl isRequired>
         <FormLabel>Name</FormLabel>
         <Input
           placeholder="Enter Your Name"
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
-      <FormControl id="email" isRequired>
+      <FormControl isRequired>
         <FormLabel>Email Address</FormLabel>
         <Input
           type="email"
@@ -140,7 +140,7 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup size="md">
           <Input
