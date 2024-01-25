@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 import Login from "../components/Auth/Login";
 import Register from "../components/Auth/Register";
 import commonStyles from "../constants/commonStyles";
-import image from "../../public/background.jpg";
+import image from "../assets/background.jpg";
 
 const HomeScreen = () => {
   const navigation = useNavigate();
@@ -42,7 +42,7 @@ const HomeScreen = () => {
           borderRadius="lg"
           boxShadow={commonStyles.shadow}
         >
-          <Text fontSize="4xl" fontWeight={"600"}>
+          <Text fontSize="4xl" fontWeight="600">
             Chat Gram
           </Text>
         </Box>

@@ -4,7 +4,7 @@ import MyChatbox from "../components/MyChatBox";
 import MyChats from "../components/MyChats";
 import SideDrawer from "../components/SideDrawer";
 import { ChatState } from "../context/ChatProvider";
-import image from "../../public/background.jpg";
+import image from "../assets/background.jpg";
 
 const ChatScreen = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
