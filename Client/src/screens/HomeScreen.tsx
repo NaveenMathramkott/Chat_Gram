@@ -31,7 +31,7 @@ const HomeScreen = () => {
       justifyContent={"center"}
       alignItems={"flex-start"}
     >
-      <Box>
+      <Box w={[300, 400, 500]}>
         <Box
           display="flex"
           justifyContent="center"
