@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
-import Login from "../components/Auth/Login";
-import Register from "../components/Auth/Register";
+import Login from "../components/auth/Login";
+import Register from "../components/auth/Register";
 import commonStyles from "../constants/commonStyles";
 import image from "../assets/background.jpg";
 
