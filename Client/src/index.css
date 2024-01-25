@@ -9,11 +9,6 @@
 ::-webkit-scrollbar {
   display: none;
 }
-.mainContainer {
-  background-image: url("../public/background.jpg");
-  background-size: contain;
-  /* filter: blur(10px); */
-}
 
 .custom-file-upload {
   background-color: #2196f3;

@@ -1,7 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getSender } from "../constants/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./GroupChatModal";

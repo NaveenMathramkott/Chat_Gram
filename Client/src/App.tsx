@@ -3,6 +3,7 @@ import HomeScreen from "./screens/HomeScreen";
 import { Toaster } from "react-hot-toast";
 import ChatScreen from "./screens/ChatScreen";
 import ChatProvider from "../src/context/ChatProvider";
+import React from "react";
 
 function App() {
   return (

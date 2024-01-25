@@ -8,6 +8,7 @@ import {
   isSameUser,
 } from "../constants/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
+import React from "react";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
