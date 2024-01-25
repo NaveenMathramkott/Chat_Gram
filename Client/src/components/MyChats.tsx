@@ -6,7 +6,7 @@ import { getSender } from "../constants/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./GroupChatModal";
 import { Button } from "@chakra-ui/react";
-import { ChatState } from "../Context/ChatProvider";
+import { ChatState } from "../context/ChatProvider";
 import toast from "react-hot-toast";
 
 const MyChats = ({ fetchAgain }) => {
