@@ -1,7 +1,14 @@
-import { Button } from "@chakra-ui/button";
-import { Avatar, FormControl, FormLabel, WrapItem } from "@chakra-ui/react";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { VStack } from "@chakra-ui/layout";
+import {
+  Button,
+  Avatar,
+  FormControl,
+  FormLabel,
+  WrapItem,
+  Input,
+  InputGroup,
+  InputRightElement,
+  VStack,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";

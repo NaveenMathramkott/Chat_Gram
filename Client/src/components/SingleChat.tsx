@@ -1,7 +1,12 @@
-import { FormControl } from "@chakra-ui/form-control";
-import { Button, Input } from "@chakra-ui/react";
-import { Box, Text } from "@chakra-ui/layout";
-import { IconButton, Spinner } from "@chakra-ui/react";
+import {
+  FormControl,
+  Button,
+  Input,
+  Box,
+  Text,
+  IconButton,
+  Spinner,
+} from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../constants/ChatLogics";
 import React, { useEffect, useState } from "react";
 import axios from "axios";

@@ -1,11 +1,10 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Box, Stack, Text, Button } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getSender } from "../constants/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./GroupChatModal";
-import { Button } from "@chakra-ui/react";
 import { ChatState } from "../context/ChatProvider";
 import toast from "react-hot-toast";
 

@@ -1,5 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Badge } from "@chakra-ui/layout";
+import { Badge } from "@chakra-ui/react";
 import React from "react";
 
 const UserBadgeItem = ({ user, handleFunction, admin }) => {

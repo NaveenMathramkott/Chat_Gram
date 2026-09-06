@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/react";
 import React, { useState } from "react";
 import MyChatbox from "../components/MyChatBox";
 import MyChats from "../components/MyChats";

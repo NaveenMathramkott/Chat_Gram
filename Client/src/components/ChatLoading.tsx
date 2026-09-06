@@ -1,5 +1,4 @@
-import { Stack } from "@chakra-ui/layout";
-import { Skeleton } from "@chakra-ui/skeleton";
+import { Stack, Skeleton } from "@chakra-ui/react";
 import React from "react";
 
 const ChatLoading = () => {
